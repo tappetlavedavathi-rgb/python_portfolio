@@ -1,0 +1,40 @@
+{% load static portfolio_extras %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ profile.name }} | Python &amp; Django Developer</title>
+    <meta name="description" content="{{ profile.meta_description }}">
+    <meta name="author" content="{{ profile.name }}">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ profile.name }} | Python &amp; Django Developer">
+    <meta property="og:description" content="{{ profile.meta_description }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% static 'img/og-cover.svg' %}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ profile.name }} | Python &amp; Django Developer">
+    <meta name="twitter:description" content="{{ profile.meta_description }}">
+
+    <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {% include "portfolio_app/includes/navbar.html" %}
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
+    {% include "portfolio_app/includes/footer.html" %}
+    <button class="to-top" type="button" aria-label="Back to top" hidden>
+        <span aria-hidden="true">↑</span>
+    </button>
+    <script src="{% static 'js/main.js' %}" defer></script>
+</body>
+</html>

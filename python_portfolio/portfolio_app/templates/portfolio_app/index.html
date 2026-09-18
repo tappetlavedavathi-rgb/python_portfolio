@@ -1,0 +1,316 @@
+{% extends "portfolio_app/base.html" %}
+{% load static portfolio_extras %}
+
+{% block content %}
+<section class="hero" id="home">
+    <div class="hero-copy reveal">
+        <p class="eyebrow">Available for thoughtful engineering work</p>
+        <h1>Hi, I'm <span>{{ profile.name }}</span></h1>
+        <p class="role">{{ profile.title }}</p>
+        <p class="lede">{{ profile.tagline }}</p>
+        <div class="hero-ctas">
+            <a class="btn btn-primary" href="#projects">View My Work</a>
+            <a class="btn btn-ghost" href="{% resume_url profile %}" download>Download Resume</a>
+            <a class="btn btn-ghost" href="#contact">Contact Me</a>
+        </div>
+        <div class="socials" aria-label="Social links">
+            <a href="{{ profile.github_url }}" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="{{ profile.linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="mailto:{{ profile.email }}">Email</a>
+        </div>
+    </div>
+    <div class="hero-visual reveal" aria-hidden="true">
+        <div class="terminal">
+            <div class="terminal-bar">
+                <span></span><span></span><span></span>
+                <p>portfolio.py</p>
+            </div>
+            <pre><code><span class="kw">class</span> <span class="fn">Developer</span>:
+    name = <span class="str">"{{ profile.name }}"</span>
+    stack = [<span class="str">"Python"</span>, <span class="str">"Django"</span>]
+    focus = <span class="str">"APIs &amp; backends"</span>
+
+    <span class="kw">def</span> <span class="fn">ship</span>(self):
+        <span class="kw">return</span> <span class="str">"clean, production-ready work"</span></code></pre>
+        </div>
+        <div class="orbit">
+            <span>Django</span>
+            <span>REST</span>
+            <span>SQL</span>
+            <span>Git</span>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="about">
+    <div class="section-heading reveal">
+        <p class="eyebrow">About</p>
+        <h2>Backend-minded, product-aware, and careful with details.</h2>
+    </div>
+    <div class="about-grid">
+        <div class="about-copy reveal">
+            <p>{{ profile.about_intro }}</p>
+            <p>{{ profile.about_details }}</p>
+            <ul class="about-points">
+                <li>Python / Django expertise</li>
+                <li>Backend development</li>
+                <li>REST APIs</li>
+                <li>Database development</li>
+                <li>Problem solving</li>
+                <li>Clean, maintainable code</li>
+            </ul>
+        </div>
+        <div class="stat-bento reveal">
+            <article>
+                <strong>{{ profile.projects_completed }}+</strong>
+                <span>Projects completed</span>
+            </article>
+            <article>
+                <strong>{{ profile.technologies_count }}+</strong>
+                <span>Technologies</span>
+            </article>
+            <article>
+                <strong>{{ profile.years_experience }}+</strong>
+                <span>Years experience</span>
+            </article>
+            <article>
+                <strong>{{ profile.github_contributions }}+</strong>
+                <span>GitHub contributions</span>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="skills">
+    <div class="section-heading reveal">
+        <p class="eyebrow">Skills</p>
+        <h2>A practical stack for shipping Django products.</h2>
+    </div>
+    <div class="skill-groups">
+        {% for group in skills_grouped %}
+        <article class="skill-card reveal">
+            <h3>{{ group.label }}</h3>
+            <ul>
+                {% for skill in group.skills %}
+                <li>
+                    <div class="skill-meta">
+                        <span>{{ skill.name }}</span>
+                        <span>{{ skill.proficiency }}%</span>
+                    </div>
+                    <div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ skill.proficiency }}" aria-label="{{ skill.name }} proficiency">
+                        <span style="--value: {{ skill.proficiency }}%"></span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section" id="experience">
+    <div class="section-heading reveal">
+        <p class="eyebrow">Experience</p>
+        <h2>Roles where I built and maintained real systems.</h2>
+    </div>
+    <ol class="timeline">
+        {% for item in experiences %}
+        <li class="timeline-item reveal">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <article class="timeline-card">
+                <p class="muted">{{ item.period_label }} · {{ item.location }}</p>
+                <h3>{{ item.title }}</h3>
+                <p class="company">{{ item.company }}</p>
+                <ul>
+                    {% for point in item.responsibility_list %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="chips">
+                    {% for tech in item.technology_list %}
+                    <span>{{ tech }}</span>
+                    {% endfor %}
+                </div>
+            </article>
+        </li>
+        {% endfor %}
+    </ol>
+</section>
+
+<section class="section" id="projects">
+    <div class="section-heading reveal">
+        <p class="eyebrow">Projects</p>
+        <h2>Selected work that shows how I think in Django.</h2>
+    </div>
+    <div class="project-grid">
+        {% for project in projects %}
+        <article class="project-card reveal">
+            <div class="project-art" style="--accent: {{ project.accent }}">
+                {% if project.image %}
+                <img src="{{ project.image.url }}" alt="{{ project.name }} preview" loading="lazy" width="640" height="360">
+                {% else %}
+                <div class="project-placeholder" aria-hidden="true">
+                    <span>{{ project.name|make_list|first }}</span>
+                    <svg viewBox="0 0 240 140" role="img" aria-hidden="true">
+                        <rect x="18" y="22" width="204" height="96" rx="12" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M18 88l42-28 34 22 28-36 82 42" fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                {% endif %}
+            </div>
+            <div class="project-body">
+                <h3>{{ project.name }}</h3>
+                <p>{{ project.summary }}</p>
+                <ul class="feature-list">
+                    {% for feature in project.feature_list %}
+                    <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="chips">
+                    {% for tech in project.technology_list %}
+                    <span>{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                <div class="project-links">
+                    {% if project.github_url %}
+                    <a class="btn btn-ghost" href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    {% endif %}
+                    {% if project.live_url %}
+                    <a class="btn btn-primary" href="{{ project.live_url }}" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section" id="education">
+    <div class="section-heading reveal">
+        <p class="eyebrow">Education</p>
+        <h2>Foundations that still shape how I work.</h2>
+    </div>
+    <div class="info-grid">
+        {% for item in education_items %}
+        <article class="info-card reveal">
+            <p class="muted">{{ item.period_label }}</p>
+            <h3>{{ item.degree }}</h3>
+            <p>{{ item.institution }} · {{ item.location }}</p>
+            {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section" id="certifications">
+    <div class="section-heading reveal">
+        <p class="eyebrow">Certifications</p>
+        <h2>Continued study, documented.</h2>
+    </div>
+    <div class="info-grid">
+        {% for item in certifications %}
+        <article class="info-card reveal">
+            <p class="muted">{{ item.issue_date|date:"M Y" }}</p>
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.issuer }}</p>
+            {% if item.credential_url %}
+            <a href="{{ item.credential_url }}" target="_blank" rel="noopener noreferrer">View credential</a>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section" id="services">
+    <div class="section-heading reveal">
+        <p class="eyebrow">Services</p>
+        <h2>Ways I can help a team or a client.</h2>
+    </div>
+    <div class="service-grid">
+        {% for service in services %}
+        <article class="service-card reveal">
+            <span class="service-icon" aria-hidden="true"></span>
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.description }}</p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section" id="stats">
+    <div class="section-heading reveal">
+        <p class="eyebrow">GitHub / Developer Stats</p>
+        <h2>A snapshot of how I work in public.</h2>
+    </div>
+    <div class="stats-row reveal">
+        <article>
+            <strong>{{ profile.github_repos }}+</strong>
+            <span>Public repositories</span>
+        </article>
+        <article>
+            <strong>{{ profile.github_stars }}+</strong>
+            <span>Stars received</span>
+        </article>
+        <article>
+            <strong>{{ profile.github_contributions }}+</strong>
+            <span>Contributions</span>
+        </article>
+        <article>
+            <a class="btn btn-ghost" href="{{ profile.github_url }}" target="_blank" rel="noopener noreferrer">Visit GitHub</a>
+        </article>
+    </div>
+</section>
+
+<section class="section" id="contact">
+    <div class="section-heading reveal">
+        <p class="eyebrow">Contact</p>
+        <h2>Tell me about the role, product, or problem.</h2>
+    </div>
+    <div class="contact-grid">
+        <aside class="contact-aside reveal">
+            <p>{{ profile.availability }}</p>
+            <ul>
+                <li><span>Email</span><a href="mailto:{{ profile.email }}">{{ profile.email }}</a></li>
+                <li><span>Phone</span><a href="tel:{{ profile.phone }}">{{ profile.phone }}</a></li>
+                <li><span>Location</span>{{ profile.location }}</li>
+            </ul>
+        </aside>
+        <div class="contact-form-wrap reveal">
+            {% if messages %}
+            <ul class="flash" aria-live="polite">
+                {% for message in messages %}
+                <li class="flash-{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{ form.website }}
+                {{ form.form_started }}
+                <div class="form-row">
+                    <label for="{{ form.name.id_for_label }}">Name</label>
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+                <div class="form-row">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+                <div class="form-row">
+                    <label for="{{ form.subject.id_for_label }}">Subject</label>
+                    {{ form.subject }}
+                    {{ form.subject.errors }}
+                </div>
+                <div class="form-row">
+                    <label for="{{ form.message.id_for_label }}">Message</label>
+                    {{ form.message }}
+                    {{ form.message.errors }}
+                </div>
+                {{ form.non_field_errors }}
+                <button class="btn btn-primary" type="submit">Send message</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
